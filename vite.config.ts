@@ -5,4 +5,7 @@ import vuetify from "vite-plugin-vuetify";
 // https://vitejs.dev/config/
 export default defineConfig({
     plugins: [vue(), vuetify({autoImport: true})],
+    optimizeDeps: {
+        include: ['lodash-es'], // Add Lodash-ES to the list of dependencies to include
+    },
 })

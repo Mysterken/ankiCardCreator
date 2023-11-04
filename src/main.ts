@@ -2,6 +2,8 @@ import { createApp } from 'vue'
 import './style.css'
 import '@mdi/font/css/materialdesignicons.css'
 import App from './App.vue'
+import Toast, {PluginOptions} from "vue-toastification";
+import "vue-toastification/dist/index.css";
 
 // Vuetify
 import 'vuetify/styles'
@@ -22,5 +24,9 @@ const vuetify = createVuetify({
     },
 })
 
-createApp(App).use(vuetify).mount('#app')
+const toastOptions: PluginOptions = {
+    position: "bottom-right",
+};
+
+createApp(App).use(vuetify).use(Toast, toastOptions).mount('#app')
 
