@@ -23,6 +23,11 @@ export default class SubjectsService {
     }
 
     async callApiWanikani(vocabulary: string) {
+
+        if (import.meta.env.PROD) {
+            this.wanikaniUrl = '/ankiCardCreator' + this.wanikaniUrl;
+        }
+
         const response = await fetch(this.wanikaniUrl);
 
         if (!response.ok) {
