@@ -4,7 +4,7 @@ import {ref} from "vue";
 import DOMPurify from 'isomorphic-dompurify';
 
 const props = defineProps<{
-  subject: object
+  subject: KanaVocabulary | Kanji | Radical | Vocabulary
 }>()
 
 const meaningPrimary = ref<string>('')
@@ -17,23 +17,23 @@ const readingMnemonic = ref<string>('')
 const readingHint = ref<string>('')
 const readings = ref<string[]>([])
 
-const hasMeaningHint = ref<boolean>(props.subject.data?.meaning_hint)
-const hasReadingHint = ref<boolean>(props.subject.data?.reading_hint)
-const hasReading = ref<boolean>(props.subject.data?.readings)
+const hasMeaningHint = ref<boolean>(props.subject?.meaning_hint)
+const hasReadingHint = ref<boolean>(props.subject?.reading_hint)
+const hasReading = ref<boolean>(props.subject?.readings)
 
-meaningPrimary.value = props.subject.data.meanings.filter((meaning: {
+meaningPrimary.value = props.subject.meanings.filter((meaning: {
   primary: boolean;
 }) => meaning.primary)[0].meaning
 
-meanings.value = props.subject.data.meanings.filter((meaning: {
+meanings.value = props.subject.meanings.filter((meaning: {
   primary: boolean;
 }) => !meaning.primary).map((meaning: { meaning: string; }) => meaning.meaning)
 
-readingPrimary.value = props.subject.data.readings?.filter((reading: {
+readingPrimary.value = props.subject.readings?.filter((reading: {
   primary: boolean;
 }) => reading.primary)[0].reading
 
-readings.value = props.subject.data.readings?.filter((reading: {
+readings.value = props.subject.readings?.filter((reading: {
   primary: boolean;
 }) => reading.primary).map((reading: { reading: string; }) => reading.reading)
 
@@ -48,11 +48,11 @@ function replaceTags(text: string) {
   )
 }
 
-meaningMnemonic.value = replaceTags(props.subject.data.meaning_mnemonic)
-readingMnemonic.value = replaceTags(props.subject.data.reading_mnemonic)
+meaningMnemonic.value = replaceTags(props.subject.meaning_mnemonic)
+readingMnemonic.value = replaceTags(props.subject.reading_mnemonic)
 
-if (hasMeaningHint.value) meaningHint.value = replaceTags(props.subject.data.meaning_hint)
-if (hasReadingHint.value) readingHint.value = replaceTags(props.subject.data.reading_hint)
+if (hasMeaningHint.value) meaningHint.value = replaceTags(props.subject.meaning_hint)
+if (hasReadingHint.value) readingHint.value = replaceTags(props.subject.reading_hint)
 
 </script>
 
@@ -64,7 +64,7 @@ if (hasReadingHint.value) readingHint.value = replaceTags(props.subject.data.rea
       min-width="200px"
   >
     <h1 style="text-align: center;">
-      <strong>{{ subject.data.characters }}</strong>
+      <strong>{{ subject.characters }}</strong>
     </h1>
     <v-divider class="my-4"/>
     <div style="text-align: center;">
@@ -74,7 +74,7 @@ if (hasReadingHint.value) readingHint.value = replaceTags(props.subject.data.rea
       </h5>
       <template v-if="hasReading">
         <h3>
-          <b><span style="color: rgb(0, 255, 0);">{{ readings.join(', ') }}</span></b>
+          <b><span style="color: rgb(38,225,38);">{{ readings.join(', ') }}</span></b>
         </h3>
       </template>
     </div>
@@ -91,6 +91,6 @@ if (hasReadingHint.value) readingHint.value = replaceTags(props.subject.data.rea
       <v-code v-html="readingHint"/>
     </template>
     <br>
-    <i><small style="color: #fc0d0d">{{ subject.object }}</small></i>
+    <i><small style="color: #fc0d0d">{{ subject.type }}</small></i>
   </v-card>
 </template>

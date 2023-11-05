@@ -2,13 +2,14 @@
 import {ref} from 'vue'
 import {useToast} from "vue-toastification";
 import Drawer from "./components/Drawer.vue";
-import {filter} from 'lodash-es';
 import AnkiCard from "./components/AnkiCard.vue";
+import SubjectsService from "./data/api/SubjectsService.ts";
 
 const vocabulary = ref('')
 const cards = ref([])
 const isLoading = ref(false)
 
+const subjectsService = new SubjectsService()
 const toast = useToast();
 
 function updateVocabulary(value: string) {
@@ -16,28 +17,19 @@ function updateVocabulary(value: string) {
 }
 
 async function callApi() {
-
+  subjectsService.clearSubjects()
   cards.value = []
-  const response = await fetch('/data/wanikani_subjects.json');
-  isLoading.value = true
 
-  if (!response.ok) {
+  try {
+    await subjectsService.callApiWanikani(vocabulary.value)
+    isLoading.value = true
+  } catch (e) {
     isLoading.value = false
-    toast.error('Failed to fetch JSON file')
+    toast.error(e.message)
     return;
   }
 
-  const jsonData = await response.json();
-  const subject = filter(jsonData.subjects, {data: {characters: vocabulary.value}})
-
-  if (subject.length === 0) {
-    isLoading.value = false
-    toast.error('No subject found')
-    return;
-  }
-
-  cards.value = subject
-  console.log(cards.value);
+  cards.value = subjectsService.getSubjects()
   isLoading.value = false
 }
 
