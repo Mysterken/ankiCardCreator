@@ -32,7 +32,7 @@ const subjectsService = new SubjectsService()
     <v-code v-html="subjectsService.getMeaningHint(subject)"/>
   </template>
   <br><br>
-  <p v-html="subjectsService.getReadingHint(subject)"/>
+  <p v-html="subjectsService.getReadingMnemonic(subject)"/>
   <template v-if="subjectsService.hasReadingHint(subject)">
     <br>
     <v-code v-html="subjectsService.getReadingHint(subject)"/>

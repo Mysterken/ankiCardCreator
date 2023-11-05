@@ -50,12 +50,8 @@ export default class SubjectsService {
         return subject.meanings.filter(meaning => !meaning.primary).map(meaning => meaning.meaning);
     }
 
-    getReadingPrimary(subject) {
-        return subject.readings.find(reading => reading.primary).reading;
-    }
-
     getReadings(subject) {
-        return subject.readings.filter(reading => !reading.primary).map(reading => reading.reading);
+        return subject.readings.filter(reading => reading.primary).map(reading => reading.reading);
     }
 
     hasMeaningHint(subject) {
