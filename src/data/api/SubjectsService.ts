@@ -59,15 +59,15 @@ export default class SubjectsService {
     }
 
     hasMeaningHint(subject) {
-        return subject.meaning_hint !== null;
+        return subject.meaning_hint !== undefined;
     }
 
     hasReadingHint(subject) {
-        return subject.reading_hint !== null;
+        return subject.reading_hint !== undefined;
     }
 
     hasReading(subject) {
-        return subject.readings.length > 0;
+        return subject.readings !== undefined;
     }
 
     getMeaningMnemonic(subject) {

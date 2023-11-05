@@ -24,7 +24,7 @@ const subjectsService = new SubjectsService()
       <h5>
         {{ subjectsService.getMeanings(subject).join(', ') }}
       </h5>
-      <template v-if="hasReading">
+      <template v-if="subjectsService.hasReading(subject)">
         <h3>
           <b><span style="color: rgb(38,225,38);">{{ subjectsService.getReadings(subject).join(', ') }}</span></b>
         </h3>
@@ -34,13 +34,13 @@ const subjectsService = new SubjectsService()
     <p v-html="subjectsService.getMeaningMnemonic(subject)"/>
     <template v-if="subjectsService.hasMeaningHint(subject)">
       <br>
-      <v-code v-html="subjectsService.getMeaningHint()"/>
+      <v-code v-html="subjectsService.getMeaningHint(subject)"/>
     </template>
     <br><br>
-    <p v-html="subjectsService.getReadingHint()"/>
-    <template v-if="subjectsService.hasReadingHint()">
+    <p v-html="subjectsService.getReadingHint(subject)"/>
+    <template v-if="subjectsService.hasReadingHint(subject)">
       <br>
-      <v-code v-html="subjectsService.getReadingHint()"/>
+      <v-code v-html="subjectsService.getReadingHint(subject)"/>
     </template>
     <br>
     <i><small style="color: #fc0d0d">{{ subject.type }}</small></i>
