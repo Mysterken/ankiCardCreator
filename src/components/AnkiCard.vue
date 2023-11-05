@@ -1,13 +1,16 @@
 <script lang="ts" setup>
 import WanikaniCardBasic from "./card-templates/WanikaniCardBasic.vue";
 import AnkiCardDialog from "./AnkiCardDialog.vue";
+import WanikaniCardBasicMD from "../data/templates-markdown/WanikaniCardBasicMD.ts";
 
-defineProps<{
+const props = defineProps<{
   subject: {
     type: object,
     required: true
   }
 }>()
+
+const md = new WanikaniCardBasicMD(props.subject)
 </script>
 
 <template>
@@ -18,6 +21,6 @@ defineProps<{
       min-width="200px"
   >
     <WanikaniCardBasic :subject="subject"/>
-    <AnkiCardDialog/>
+    <AnkiCardDialog :back-text="md.generateBack()" :front-text="md.generateFront()"/>
   </v-card>
 </template>
