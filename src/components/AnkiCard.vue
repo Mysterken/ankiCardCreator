@@ -9,10 +9,12 @@ const props = defineProps<{
 
 const meaningPrimary = ref<string>('')
 const meaningMnemonic = ref<string>('')
+const meaningHint = ref<string>('')
 const meanings = ref<string[]>([])
 
 const readingPrimary = ref<string>('')
 const readingMnemonic = ref<string>('')
+const readingHint = ref<string>('')
 const readings = ref<string[]>([])
 
 const hasMeaningHint = ref<boolean>(props.subject.data?.meaning_hint)
@@ -49,6 +51,9 @@ function replaceTags(text: string) {
 meaningMnemonic.value = replaceTags(props.subject.data.meaning_mnemonic)
 readingMnemonic.value = replaceTags(props.subject.data.reading_mnemonic)
 
+if (hasMeaningHint.value) meaningHint.value = replaceTags(props.subject.data.meaning_hint)
+if (hasReadingHint.value) readingHint.value = replaceTags(props.subject.data.reading_hint)
+
 </script>
 
 <template>
@@ -74,20 +79,16 @@ readingMnemonic.value = replaceTags(props.subject.data.reading_mnemonic)
       </template>
     </div>
     <br>
-    <p v-html="meaningMnemonic"></p>
+    <p v-html="meaningMnemonic"/>
     <template v-if="hasMeaningHint">
       <br>
-      <v-code>
-        {{ subject.data.meaning_hint }}
-      </v-code>
+      <v-code v-html="meaningHint"/>
     </template>
     <br><br>
-    <p v-html="readingMnemonic"></p>
+    <p v-html="readingMnemonic"/>
     <template v-if="hasReadingHint">
       <br>
-      <v-code>
-        {{ subject.data.reading_hint }}
-      </v-code>
+      <v-code v-html="readingHint"/>
     </template>
     <br>
     <i><small style="color: #fc0d0d">{{ subject.object }}</small></i>
