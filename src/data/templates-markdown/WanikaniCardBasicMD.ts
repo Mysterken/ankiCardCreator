@@ -27,8 +27,14 @@ export default class WanikaniCardBasicMD {
                 <b><span style="color: rgb(38,225,38);">${this.subjectsService.getReadings(this.subject).join(', ')}</span></b>
             </h3>` : '';
 
+        const meaningMnemonic = this.subjectsService.getMeaningMnemonic(this.subject) ?
+            `<p>${this.subjectsService.getMeaningMnemonic(this.subject)}</p>` : '';
+
         const meaningHint = this.subjectsService.hasMeaningHint(this.subject) ?
-            `<code>${this.subjectsService.getMeaningHint(this.subject)}</code>` : '';
+            `<code>${this.subjectsService.getMeaningHint(this.subject)}</code><br><br>` : '';
+
+        const readingMnemonic = this.subjectsService.getReadingMnemonic(this.subject) ?
+            `<p>${this.subjectsService.getReadingMnemonic(this.subject)}</p>` : '';
 
         const readingHint = this.subjectsService.hasReadingHint(this.subject) ?
             `<code>${this.subjectsService.getReadingHint(this.subject)}</code>` : '';
@@ -41,10 +47,9 @@ export default class WanikaniCardBasicMD {
                 </h5>
                 ${reading}
             </div>
-            <p>${this.subjectsService.getMeaningMnemonic(this.subject)}</p>
+            ${meaningMnemonic}
             ${meaningHint}
-            <br><br>
-            <p>${this.subjectsService.getReadingMnemonic(this.subject)}</p>
+            ${readingMnemonic}
             ${readingHint}
             <br>
             <i><small style="color: #fc0d0d">${this.subject.type}</small></i>`
