@@ -22,7 +22,7 @@ async function callApi() {
 
   try {
     isLoading.value = true
-    await subjectsService.callApiWanikani(vocabulary.value)
+    await subjectsService.callApiWanikani(vocabulary.value.trim())
   } catch (e) {
     isLoading.value = false
     toast.error(e.message)
