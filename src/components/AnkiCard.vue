@@ -4,10 +4,7 @@ import AnkiCardDialog from "./AnkiCardDialog.vue";
 import WanikaniCardBasicMD from "../data/templates-markdown/WanikaniCardBasicMD.ts";
 
 const props = defineProps<{
-  subject: {
-    type: object,
-    required: true
-  }
+  subject: object
 }>()
 
 const md = new WanikaniCardBasicMD(props.subject)

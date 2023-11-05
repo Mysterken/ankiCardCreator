@@ -10,7 +10,7 @@ export default class SubjectsService {
         this.subjects = [];
     }
 
-    addSubject(subject) {
+    addSubject(subject: object) {
         this.subjects.push(subject);
     }
 
@@ -22,8 +22,8 @@ export default class SubjectsService {
         this.subjects = [];
     }
 
-    async callApiWanikani(vocabulary) {
-        const response: Promise = await fetch(this.wanikaniUrl);
+    async callApiWanikani(vocabulary: string) {
+        const response = await fetch(this.wanikaniUrl);
 
         if (!response.ok) {
             throw new Error('Failed to fetch JSON file');
@@ -42,47 +42,47 @@ export default class SubjectsService {
         }
     }
 
-    getMeaningPrimary(subject) {
+    getMeaningPrimary(subject: KanaVocabulary | Kanji | Radical | Vocabulary) {
         return subject.meanings.find(meaning => meaning.primary).meaning;
     }
 
-    getMeanings(subject) {
+    getMeanings(subject: KanaVocabulary | Kanji | Radical | Vocabulary) {
         return subject.meanings.filter(meaning => !meaning.primary).map(meaning => meaning.meaning);
     }
 
-    getReadings(subject) {
+    getReadings(subject: KanaVocabulary | Kanji | Radical | Vocabulary) {
         return subject.readings.filter(reading => reading.primary).map(reading => reading.reading);
     }
 
-    hasMeaningHint(subject) {
+    hasMeaningHint(subject: KanaVocabulary | Kanji | Radical | Vocabulary) {
         return subject.meaning_hint !== undefined;
     }
 
-    hasReadingHint(subject) {
+    hasReadingHint(subject: KanaVocabulary | Kanji | Radical | Vocabulary) {
         return subject.reading_hint !== undefined;
     }
 
-    hasReading(subject) {
+    hasReading(subject: KanaVocabulary | Kanji | Radical | Vocabulary) {
         return subject.readings !== undefined;
     }
 
-    getMeaningMnemonic(subject) {
+    getMeaningMnemonic(subject: KanaVocabulary | Kanji | Radical | Vocabulary) {
         return this.replaceTags(subject.meaning_mnemonic);
     }
 
-    getReadingMnemonic(subject) {
+    getReadingMnemonic(subject: KanaVocabulary | Kanji | Radical | Vocabulary) {
         return this.replaceTags(subject.reading_mnemonic);
     }
 
-    getMeaningHint(subject) {
+    getMeaningHint(subject: KanaVocabulary | Kanji | Radical | Vocabulary) {
         return this.replaceTags(subject.meaning_hint);
     }
 
-    getReadingHint(subject) {
+    getReadingHint(subject: KanaVocabulary | Kanji | Radical | Vocabulary) {
         return this.replaceTags(subject.reading_hint);
     }
 
-    protected replaceTags(text) {
+    protected replaceTags(text: string) {
         if (!text) return '';
         return DOMPurify.sanitize(
             text

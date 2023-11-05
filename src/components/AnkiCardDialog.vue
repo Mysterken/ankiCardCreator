@@ -2,14 +2,8 @@
 import {useToast} from "vue-toastification";
 
 defineProps<{
-  frontText: {
-    type: string,
-    required: true
-  },
-  backText: {
-    type: string,
-    required: true
-  }
+  frontText: string,
+  backText: string
 }>()
 
 const toast = useToast();

@@ -50,7 +50,7 @@ function dialogTemplate() {
               v-model="select"
               :items="sources"
               class="mt-2"
-              hide-details="true"
+              hide-details
               label="Source"
               variant="outlined"
               disabled
