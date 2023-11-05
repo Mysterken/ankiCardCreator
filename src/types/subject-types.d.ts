@@ -10,6 +10,7 @@ interface Subject {
     meanings: Meaning[];
     slug: string;
     spaced_repetition_system_id: number;
+    type: SubjectType;
 }
 
 interface Meaning {
