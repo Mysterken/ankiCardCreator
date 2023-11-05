@@ -21,8 +21,8 @@ async function callApi() {
   cards.value = []
 
   try {
-    await subjectsService.callApiWanikani(vocabulary.value)
     isLoading.value = true
+    await subjectsService.callApiWanikani(vocabulary.value)
   } catch (e) {
     isLoading.value = false
     toast.error(e.message)
