@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import WanikaniCardBasic from "./card-templates/WanikaniCardBasic.vue";
+import AnkiCardDialog from "./AnkiCardDialog.vue";
 
 defineProps<{
   subject: {
@@ -17,5 +18,6 @@ defineProps<{
       min-width="200px"
   >
     <WanikaniCardBasic :subject="subject"/>
+    <AnkiCardDialog/>
   </v-card>
 </template>
