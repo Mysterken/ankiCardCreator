@@ -22,6 +22,11 @@ export default class WanikaniCardBasicMD {
     }
 
     generateBack() {
+        const meanings = this.subjectsService.getMeanings(this.subject) ?
+            `<h5>
+                <b>${this.subjectsService.getMeanings(this.subject).join(', ')}</b>
+            </h5>` : '';
+
         const reading = this.subjectsService.hasReading(this.subject) ?
             `<h3>
                 <b><span style="color: rgb(38,225,38);">${this.subjectsService.getReadings(this.subject).join(', ')}</span></b>
@@ -42,9 +47,7 @@ export default class WanikaniCardBasicMD {
         return this.back =
             `<div style="text-align: center;">
                 <h2><b>${this.subjectsService.getMeaningPrimary(this.subject)}</b></h2>
-                <h5>
-                    ${this.subjectsService.getMeanings(this.subject).join(', ')}
-                </h5>
+                ${meanings}
                 ${reading}
             </div>
             ${meaningMnemonic}
