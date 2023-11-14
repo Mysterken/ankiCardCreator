@@ -7,10 +7,15 @@ import SubjectsService from "./data/api/SubjectsService.ts";
 
 const vocabulary = ref('')
 const cards = ref([])
+const source = ref('Wanikani')
 const isLoading = ref(false)
 
 const subjectsService = new SubjectsService()
 const toast = useToast();
+
+function changeSource(value: string) {
+  source.value = value
+}
 
 function updateVocabulary(value: string) {
   vocabulary.value = value
@@ -36,8 +41,8 @@ async function callApi() {
 </script>
 
 <template>
-  <v-app>
-    <Drawer :toast="toast"/>
+  <v-app >
+    <Drawer @change-source="changeSource" :toast="toast" :default-select="source"/>
     <v-main
         id="main"
         class="d-flex align-center justify-center flex-column py-8"
@@ -57,6 +62,7 @@ async function callApi() {
             v-for="card in cards"
             :key="card.id"
             :subject="card"
+            :source="source"
         />
       </v-sheet>
     </v-main>

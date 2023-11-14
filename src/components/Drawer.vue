@@ -2,12 +2,16 @@
 import {ref} from 'vue'
 import {useToast} from "vue-toastification";
 
+const props = defineProps<{
+  defaultSelect: string
+}>()
+
 const drawer = ref(true)
 const rail = ref(true)
-const select = ref('Wanikani')
+const selected: string = ref(props.defaultSelect || 'Wanikani')
 const sources = ref([
   'Wanikani',
-  'Jisho',
+  // 'Jisho',
 ])
 
 const toast = useToast();
@@ -47,13 +51,13 @@ function dialogTemplate() {
         <v-sheet class="d-flex align-center">
           <v-icon icon="mdi-web mr-4 mt-2"/>
           <v-select
-              v-model="select"
+              v-model="selected"
               :items="sources"
               class="mt-2"
               hide-details
               label="Source"
               variant="outlined"
-              disabled
+              @update:model-value="$emit('changeSource', $event)"
           ></v-select>
         </v-sheet>
       </v-list-item>

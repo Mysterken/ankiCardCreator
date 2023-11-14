@@ -2,9 +2,11 @@
 import WanikaniCardBasic from "./card-templates/WanikaniCardBasic.vue";
 import AnkiCardDialog from "./AnkiCardDialog.vue";
 import WanikaniCardBasicMD from "../data/templates-markdown/WanikaniCardBasicMD.ts";
+import JishoCardBasic from "./card-templates/JishoCardBasic.vue";
 
 const props = defineProps<{
-  subject: object
+  subject: object,
+  source: string
 }>()
 
 const md = new WanikaniCardBasicMD(props.subject)
@@ -17,7 +19,8 @@ const md = new WanikaniCardBasicMD(props.subject)
       max-width="450px"
       min-width="200px"
   >
-    <WanikaniCardBasic :subject="subject"/>
+    <WanikaniCardBasic v-if="source === 'Wanikani'" :subject="subject"/>
+    <JishoCardBasic v-if="source === 'Jisho'" :subject="subject"/>
     <AnkiCardDialog :back-text="md.generateBack()" :front-text="md.generateFront()"/>
   </v-card>
 </template>
