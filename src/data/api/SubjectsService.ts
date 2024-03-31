@@ -1,9 +1,9 @@
-import {filter} from "lodash-es";
 import DOMPurify from "isomorphic-dompurify";
 
 export default class SubjectsService {
 
     private wanikaniUrl: string = '/data/wanikani_subjects.json';
+    private ankiCardCreatorDbVersion: number = 1;
     private subjects: object[];
 
     constructor() {
@@ -22,29 +22,135 @@ export default class SubjectsService {
         this.subjects = [];
     }
 
+    async upgradeDatabase(
+        event: Event,
+        url: string,
+        name: string,
+        version: number,
+        indexes: {
+            name: string,
+            key: string,
+            options: { unique: boolean }
+        }[]
+    ) {
+        return new Promise(async (resolve) => {
+
+            const db = event.target.result;
+
+            if (db.objectStoreNames.contains(name)) {
+                db.deleteObjectStore(name);
+            }
+
+            const createdStore = db.createObjectStore(name, {keyPath: 'id'});
+
+            for (const index of indexes) {
+                createdStore.createIndex(index.name, index.key, index.options);
+            }
+
+            const response = await fetch(
+                import.meta.env.PROD ?
+                    '/ankiCardCreator' + url :
+                    url
+            );
+
+            if (!response.ok) throw new Error('Failed to fetch JSON file');
+
+            const jsonData = await response.json();
+
+            const transaction = db.transaction([name], "readwrite");
+            const objectStore = transaction.objectStore(name);
+
+            let id = 1;
+            for (const subject of jsonData.subjects) {
+                subject.id = id++;
+                objectStore.add(subject);
+            }
+
+            transaction.oncomplete = () => {
+                resolve();
+            };
+        });
+    }
+
+    async setSubjects(
+        event: Event,
+        name: string,
+        index: string,
+        vocabulary: string
+    ) {
+        return new Promise(async (resolve) => {
+
+            const db = event.target.result;
+
+            const transaction = db.transaction([name], "readonly");
+            const objectStore = transaction.objectStore(name);
+            const searchIndex = objectStore.index(index);
+
+            const getRequest = searchIndex.getAll(vocabulary);
+            getRequest.onsuccess = () => {
+                for (const subject of getRequest.result) {
+                    subject.data.type = subject.object;
+                    this.addSubject(subject.data);
+                }
+
+                resolve();
+            };
+
+            getRequest.onerror = () => {
+                throw new Error('Failed to fetch data from database');
+            }
+        });
+    };
+
+    async callApi(
+        vocabulary: string,
+        url: string,
+        name: string,
+        version: number,
+        indexes: {
+            name: string,
+            key: string,
+            options: { unique: boolean }
+        }[],
+        indexSearch: string
+    ) {
+
+        const DBOpenRequest = await window.indexedDB.open("ankiCardCreator", this.ankiCardCreatorDbVersion);
+
+        return new Promise((resolve) => {
+
+            let updateNeeded = false;
+
+            DBOpenRequest.onupgradeneeded = async (event: IDBVersionChangeEvent) => {
+                updateNeeded = true;
+
+                await this.upgradeDatabase(event, url, name, version, indexes);
+                await this.setSubjects(event, name, indexSearch, vocabulary);
+                resolve();
+            }
+
+            DBOpenRequest.onerror = function (event) {
+                throw new Error('Error loading database.');
+            };
+
+            DBOpenRequest.onsuccess = async (event) => {
+                if (updateNeeded) return;
+
+                await this.setSubjects(event, name, indexSearch, vocabulary);
+                resolve();
+            };
+        });
+    }
+
     async callApiWanikani(vocabulary: string) {
-
-        const response = await fetch(
-            import.meta.env.PROD ?
-                '/ankiCardCreator' + this.wanikaniUrl :
-                this.wanikaniUrl
+        await this.callApi(
+            vocabulary,
+            this.wanikaniUrl,
+            'wanikani',
+            1,
+            [{name: 'characters_idx', key: 'data.characters', options: {unique: false}}],
+            'characters_idx'
         );
-
-        if (!response.ok) {
-            throw new Error('Failed to fetch JSON file');
-        }
-
-        const jsonData = await response.json();
-        const subjects = filter(jsonData.subjects, {data: {characters: vocabulary}})
-
-        if (subjects.length === 0) {
-            throw new Error('No subjects found');
-        }
-
-        for (const subject of subjects) {
-            subject.data.type = subject.object;
-            this.addSubject(subject.data)
-        }
     }
 
     getMeaningPrimary(subject: KanaVocabulary | Kanji | Radical | Vocabulary) {
