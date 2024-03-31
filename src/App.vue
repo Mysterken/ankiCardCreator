@@ -5,7 +5,7 @@ import Drawer from "./components/Drawer.vue";
 import AnkiCard from "./components/AnkiCard.vue";
 import SubjectsService from "./data/api/SubjectsService.ts";
 
-const vocabulary = ref('')
+const vocabulary = ref('暗記')
 const cards = ref([])
 const source = ref('Wanikani')
 const isLoading = ref(false)
@@ -47,7 +47,7 @@ async function callApi() {
         id="main"
         class="d-flex align-center justify-center flex-column py-8"
     >
-      <v-text-field class="flex-0-0" label="Vocabulary" style="min-width: 250px" variant="outlined"
+      <v-text-field class="flex-0-0" label="Vocabulary" style="min-width: 250px" variant="outlined" v-model="vocabulary"
                     @keyup.enter="callApi" @update:modelValue="updateVocabulary"/>
       <v-btn variant="outlined" @click="callApi">
         Generate card
