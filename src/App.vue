@@ -41,13 +41,13 @@ async function callApi() {
 </script>
 
 <template>
-  <v-app >
-    <Drawer @change-source="changeSource" :toast="toast" :default-select="source"/>
+  <v-app>
+    <Drawer :default-select="source" :toast="toast" @change-source="changeSource"/>
     <v-main
         id="main"
         class="d-flex align-center justify-center flex-column py-8"
     >
-      <v-text-field class="flex-0-0" label="Vocabulary" style="min-width: 250px" variant="outlined" v-model="vocabulary"
+      <v-text-field v-model="vocabulary" class="flex-0-0" label="Vocabulary" style="min-width: 250px" variant="outlined"
                     @keyup.enter="callApi" @update:modelValue="updateVocabulary"/>
       <v-btn variant="outlined" @click="callApi">
         Generate card
@@ -61,8 +61,8 @@ async function callApi() {
         <AnkiCard
             v-for="card in cards"
             :key="card.id"
-            :subject="card"
             :source="source"
+            :subject="card"
         />
       </v-sheet>
     </v-main>
