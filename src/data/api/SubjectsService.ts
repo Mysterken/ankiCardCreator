@@ -33,7 +33,7 @@ export default class SubjectsService {
             options: { unique: boolean }
         }[]
     ) {
-        return new Promise(async (resolve) => {
+        return new Promise(async (resolve, reject) => {
 
             const db = event.target.result;
 
@@ -53,7 +53,7 @@ export default class SubjectsService {
                     url
             );
 
-            if (!response.ok) throw new Error('Failed to fetch JSON file');
+            if (!response.ok) reject('Failed to fetch JSON file from server');
 
             const jsonData = await response.json();
 
@@ -78,7 +78,7 @@ export default class SubjectsService {
         index: string,
         vocabulary: string
     ) {
-        return new Promise(async (resolve) => {
+        return new Promise(async (resolve, reject) => {
 
             const db = event.target.result;
 
@@ -93,12 +93,16 @@ export default class SubjectsService {
                     this.addSubject(subject.data);
                 }
 
+                if (this.getSubjects().length === 0) {
+                    reject('No subjects found');
+                }
+
                 resolve();
             };
 
             getRequest.onerror = () => {
-                throw new Error('Failed to fetch data from database');
-            }
+                reject('Failed to fetch data from database');
+            };
         });
     };
 
@@ -117,7 +121,7 @@ export default class SubjectsService {
 
         const DBOpenRequest = await window.indexedDB.open("ankiCardCreator", this.ankiCardCreatorDbVersion);
 
-        return new Promise((resolve) => {
+        return new Promise((resolve, reject) => {
 
             let updateNeeded = false;
 
@@ -125,32 +129,44 @@ export default class SubjectsService {
                 updateNeeded = true;
 
                 await this.upgradeDatabase(event, url, name, version, indexes);
-                await this.setSubjects(event, name, indexSearch, vocabulary);
+                await this.setSubjects(event, name, indexSearch, vocabulary)
+                    .catch(error => {
+                        reject(error);
+                    });
+
                 resolve();
             }
 
             DBOpenRequest.onerror = function (event) {
-                throw new Error('Error loading database.');
+                reject('Error loading database.');
             };
 
             DBOpenRequest.onsuccess = async (event) => {
                 if (updateNeeded) return;
 
-                await this.setSubjects(event, name, indexSearch, vocabulary);
+                await this.setSubjects(event, name, indexSearch, vocabulary)
+                    .catch(error => {
+                        reject(error);
+                    });
+
                 resolve();
             };
         });
     }
 
     async callApiWanikani(vocabulary: string) {
-        await this.callApi(
-            vocabulary,
-            this.wanikaniUrl,
-            'wanikani',
-            1,
-            [{name: 'characters_idx', key: 'data.characters', options: {unique: false}}],
-            'characters_idx'
-        );
+        try {
+            await this.callApi(
+                vocabulary,
+                this.wanikaniUrl,
+                'wanikani',
+                1,
+                [{name: 'characters_idx', key: 'data.characters', options: {unique: false}}],
+                'characters_idx'
+            );
+        } catch (error) {
+            throw new Error(error);
+        }
     }
 
     getMeaningPrimary(subject: KanaVocabulary | Kanji | Radical | Vocabulary) {
