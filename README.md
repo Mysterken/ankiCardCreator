@@ -45,3 +45,9 @@ vite
 ```
 
 Now you can access the application on your browser
+
+## TODO
+
+- Add support for more sources of vocabulary data. (Jisho, joyokanji, etc.)
+- Add new cards templates.
+- Add support for custom card templates.
