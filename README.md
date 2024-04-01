@@ -1,18 +1,47 @@
-# Vue 3 + TypeScript + Vite
+# Anki Card Creator
 
-This template should help get you started developing with Vue 3 and TypeScript in Vite. The template uses Vue 3 `<script setup>` SFCs, check out the [script setup docs](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup) to learn more.
+Anki Card Creator is a project developed using TypeScript, Vite and Vue.  
+It allows users to search for vocabulary items and create Anki cards for them.
 
-## Recommended IDE Setup
+Access the application on the [github page](https://mysterken.github.io/ankiCardCreator/).
 
-- [VS Code](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur) + [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin).
+## Usage
 
-## Type Support For `.vue` Imports in TS
+To use the application, enter the vocabulary you want to learn in the search bar. The application will fetch the data,
+create Anki cards, and display the information.
 
-TypeScript cannot handle type information for `.vue` imports by default, so we replace the `tsc` CLI with `vue-tsc` for type checking. In editors, we need [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin) to make the TypeScript language service aware of `.vue` types.
+## Features
 
-If the standalone TypeScript plugin doesn't feel fast enough to you, Volar has also implemented a [Take Over Mode](https://github.com/johnsoncodehk/volar/discussions/471#discussioncomment-1361669) that is more performant. You can enable it by the following steps:
+- Fetches data from an API and stores it in IndexedDB.
+- Allows users to search for specific vocabulary.
+- Provides detailed information about each vocabulary item, including meanings, readings, mnemonics, and hints.
+- Supports different types of vocabulary items: Kana, Kanji, Radical, and Vocabulary.
+- Sanitizes and formats the fetched data for display.
 
-1. Disable the built-in TypeScript Extension
-   1. Run `Extensions: Show Built-in Extensions` from VSCode's command palette
-   2. Find `TypeScript and JavaScript Language Features`, right click and select `Disable (Workspace)`
-2. Reload the VSCode window by running `Developer: Reload Window` from the command palette.
+## Development
+
+### Prerequisites
+- Node.js
+- Yarn or npm
+- Git
+
+### Project setup
+
+Clone the repository:
+```bash
+git clone https://github.com/Mysterken/ankiCardCreator.git
+```
+
+Install the dependencies:
+```bash
+yarn install
+# or
+npm install
+```
+
+Compiles and hot-reloads for development
+```bash
+vite
+```
+
+Now you can access the application on your browser
