@@ -137,7 +137,7 @@ export default class SubjectsService {
                 resolve();
             }
 
-            DBOpenRequest.onerror = function (event) {
+            DBOpenRequest.onerror = function () {
                 reject('Error loading database.');
             };
 

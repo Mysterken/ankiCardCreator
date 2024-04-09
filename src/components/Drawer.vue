@@ -13,6 +13,7 @@ const sources = ref([
   'Wanikani',
   // 'Jisho',
 ])
+const sourceCode = import.meta.env.VITE_SOURCE_CODE
 
 const toast = useToast();
 
@@ -63,5 +64,12 @@ function dialogTemplate() {
       </v-list-item>
       <v-list-item prepend-icon="mdi-xml" title="Card Template" value="template" @click="dialogTemplate"></v-list-item>
     </v-list>
+    <template v-slot:append>
+      <v-list>
+        <v-list-item prepend-icon="mdi-github" value="template" variant="plain" :href="sourceCode" target="_blank">
+          Source Code
+        </v-list-item>
+      </v-list>
+    </template>
   </v-navigation-drawer>
 </template>
