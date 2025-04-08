@@ -23,7 +23,7 @@
     "@vitejs/plugin-vue": "^5.0.4",
     "typescript": "^5.0.2",
     "vite": "^6.1.0",
-    "vite-plugin-pwa": "^0.21.1",
+    "vite-plugin-pwa": "^1.0.0",
     "vue-tsc": "^2.0.7"
   }
 }
